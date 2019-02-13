@@ -24,7 +24,6 @@
 
 6.Log_util.py主要是日志设置模块
 
-----------------------------------------------------------
 #### 上传用例(upload_cases.py)：
 
 1. API对应的URL为：url = 'http://10.255.101.237/testlink/lib/api/xmlrpc/v1/xmlrpc.php'
@@ -43,7 +42,6 @@
 
 8. 执行upload_cases.py
 
-----------------------------------------------------------
 #### 下载用例(download_cases.py）：
 
 1. API对应的URL为：url = 'http://10.255.101.237/testlink/lib/api/xmlrpc/v1/xmlrpc.php'
