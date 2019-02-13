@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # _*_ coding:utf-8 _*_
 
+#author:Hongrui
+#date: 2019/02/11
+
 import logging
 import time
 import os
