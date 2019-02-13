@@ -54,4 +54,4 @@ PMO-公开 > 从Testlink导入导出用例 > image2019-2-13 14:7:15.png
 
 3. father_id为目标用例集ID，可通过在testlink用例管理界面选取用例集，然后点击右键获取APIID
 
-  4.执行download_cases.py
+4.执行download_cases.py
