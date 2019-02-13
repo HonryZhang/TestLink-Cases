@@ -26,6 +26,7 @@
 
 #### 上传用例(upload_cases.py)：
 
+
 1. API对应的URL为：url = 'http://10.255.101.237/testlink/lib/api/xmlrpc/v1/xmlrpc.php'
 
 2. API对应的key为：登陆testlink后点击上方个人账号进入个人中心，新页面点击 '生成新的秘钥'，使用该key替换掉main文件中的key值
@@ -43,6 +44,7 @@
 8. 执行upload_cases.py
 
 #### 下载用例(download_cases.py）：
+
 
 1. API对应的URL为：url = 'http://10.255.101.237/testlink/lib/api/xmlrpc/v1/xmlrpc.php'
 
