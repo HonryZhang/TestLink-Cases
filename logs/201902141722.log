@@ -1,0 +1,7 @@
+[2019-02-14 17:22:30,045]-[download_cases.py]-INFO: 开始执行脚本
+[2019-02-14 17:22:30,045]-[download_cases.py]-INFO: 开始下载用例
+[2019-02-14 17:22:30,422]-[download_cases.py]-INFO: 指定的用例集名称为：存储桶基本操作
+[2019-02-14 17:22:31,066]-[download_cases.py]-INFO: 下载数据完毕，开始执行格式转换
+[2019-02-14 17:22:31,469]-[download_cases.py]-INFO: 用例集_<存储桶基本操作>中总共有<7>条用例
+[2019-02-14 17:22:31,469]-[download_cases.py]-INFO: 开始保存用例
+[2019-02-14 17:22:31,471]-[download_cases.py]-INFO: 导出用例成功，存放地址为:/Users/xsky/Documents/Automation/PyCharm_Projects/Test_Folder/TestLink_Test/download

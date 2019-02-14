@@ -43,7 +43,7 @@ def download_case():
                 expected_results.append(expected_result)
             else:
                 expected_results.append(step_number+'.'+expected_result.replace('<p>','').replace('</p>',''))
-        datas.append((case_name,preconditions,'\n'.join(actions),'\n'.join(expected_results),execution_type,author,importance,summary))
+        datas.append((case_name,summary,preconditions,'\n'.join(actions),'\n'.join(expected_results),execution_type,importance,author))
 
     log.info(u'下载数据完毕，开始执行格式转换')
     save_suites(os.path.join('testCase','download_template.xls'),datas,father_id)
@@ -67,17 +67,18 @@ def save_suites(file_path,datas,father_id):
 #    print len(datas)
     #逐个读取datas列表的数据，并根据指定的行和列，写入到excel单元格中
     for i in range(0,len(datas)):
-        case_name,preconditions,actions,expected_results,execution_type,author,importance,summary = datas[i]
+        case_name,summary,preconditions,actions,expected_results,execution_type,importance,author = datas[i]
         #print case_name,preconditions,actions,expected_results,execution_type,author,importance,summary
 
         sheet.write(line_num,0,u'%s'%case_name)
-        sheet.write(line_num, 1, u'%s' % preconditions)
-        sheet.write(line_num, 2, u'%s' % actions)
-        sheet.write(line_num, 3, u'%s' % expected_results)
-        sheet.write(line_num, 4, u'%s' % execution_type)
-        sheet.write(line_num, 5, u'%s' % author)
+        sheet.write(line_num, 1, u'%s' % summary)
+        sheet.write(line_num, 2, u'%s' % preconditions)
+        sheet.write(line_num, 3, u'%s' % actions)
+        sheet.write(line_num, 4, u'%s' % expected_results)
+        sheet.write(line_num, 5, u'%s' % execution_type)
         sheet.write(line_num, 6, u'%s' % importance)
-        sheet.write(line_num, 7, u'%s' % summary)
+        sheet.write(line_num, 7, u'%s' % author)
+
 
         line_num += 1
 
