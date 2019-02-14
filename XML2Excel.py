@@ -113,6 +113,7 @@ def xml_to_xls(file_path,datas):
         #log.error(u'保存用例失败', str(e))
         print e
         sys.exit()
+
     else:
         print 'success'
         #log.info(u'导出用例成功，存放地址为:' + report_path)
