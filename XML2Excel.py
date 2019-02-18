@@ -4,10 +4,10 @@
 #author:Hongrui
 #date:2019/2/14
 
-import sys,xlrd
+import sys,xlrd,json
 from xlutils.copy import copy
-reload(sys)
-sys.setdefaultencoding('utf8')
+#reload(sys)
+#sys.setdefaultencoding('utf8')
 
 import xmltodict,os
 
@@ -21,34 +21,38 @@ def transfer_xml(xml_file):
                 line = line.replace('<p>','').replace('</p>','')
             if '<br/>' in line:
                 line = line.replace('<br/>','')
-            f_w.write(line.decode('gbk').encode('utf-8'))
+            #f_w.write(line.decode('gbk').encode('utf-8'))
+            f_w.write(line)
+            #f_w.write(line.encode('utf-8'))
     new_file = xml_file
     return new_file
 
 #将xml文件转换成json格式
-def xml_2_json():
-    new_file = transfer_xml(xml_file)
-
-    xml = open(new_file,'r')
+def xml_2_json(file):
+    #new_file = transfer_xml(xml_file)
+    xml = open(file,'r')
     xml_string = xml.read()
     xml.close()
-    return xmltodict.parse(xml_string)
+    json_file = xmltodict.parse(xml_string)
+    return json_file
 
 #读取json文件，取出需要的数据，以元组的形式存放到datas列表中，方便后续扩展成多用例批量导入
-def get_datas():
+def get_datas(xml_file):
 
     datas = []
-    test = xml_2_json()
-    #print json.dumps(test)
+    new_file = transfer_xml(xml_file)
+    test = xml_2_json(new_file)
+    #test = xml_2_json()
+#    print json.dumps(test)
     case_name = test['rss']['channel']['item']['title']
-    case_name = ' '.join(case_name.split())
-    print case_name
+    case_name = ''.join(case_name.split())
+#    print case_name
     summary =  test['rss']['channel']['item']['summary']
-    print summary
+#    print summary
     steps = test['rss']['channel']['item']['customfields']['customfield'][1]['customfieldvalues']['steps']['step']
-    precondition = '1.集群状态正常'+'\n'+'2.UI登录正常'+'\n'+'3.已经创建好数据池和缓存池'
-    execution_type ='手动'
-    importance = '高'
+    precondition = u'1.集群状态正常'+'\n'+u'2.UI登录正常'+'\n'+u'3.已经创建好数据池和缓存池'
+    execution_type =u'手动'
+    importance = u'高'
 
     actions = []
     expected_results=[]
@@ -122,4 +126,4 @@ def xml_to_xls(file_path,datas):
 if __name__=='__main__':
     xml_file = '/Users/xsky/Downloads/xml_test.xml'
     author = raw_input('Testlink login username:')
-    get_datas()
+    get_datas(xml_file)
