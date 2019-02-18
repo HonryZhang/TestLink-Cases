@@ -68,3 +68,35 @@
 
 6.执行upload_cases.py上传用例
 
+#### 将Jira单个用例逐个导入到testlink(XML2Excel_OneByONe.py）
+
+1.每次只能导入一个用例，但是所有的用例都保持在一个excel文件中
+
+2.一次批量导入多个单独的用例到testlink用例集中。如果用例是不同模块的，需要手动调整到对应的目录下
+
+3.选取jira上的某个用例，导出为xml格式
+
+4.选择将xml文件的<rss version="0.92">...</rss>,另存为本地的xml_test.xml.路径保持和脚本所在路径平行。支持修改文件名，同时要记住修改XML2Excel.py脚本中main方法的xml文件名
+
+5.为了导入方便，执行XML2Excel.py时，需要输入testlink的登录用户名，保持和upload_cases.py的配置一致。脚本执行完成后，会生成以用户名命令的excel文件
+
+6.打开upload_cases.py，修改main方法中的file_name为刚刚导出的excel文件
+
+7.执行upload_cases.py上传用例
+
+#### 将Jira多个用例导入到testlink(XML2Excel_MultiCases.py）
+
+1.通过在jira上根据关键字查找到的所有用例，然后导出成xml 格式，再根据xml解析成excel格式，导入到testlink
+
+2.选择将xml文件的<rss version="0.92">...</rss>,另存为本地的xml_test.xml.路径保持和脚本所在路径平行。支持修改文件名，同时要记住修改XML2Excel.py脚本中main方法的xml文件名
+
+3.为了导入方便，执行XML2Excel.py时，需要输入testlink的登录用户名，保持和upload_cases.py的配置一致。脚本执行完成后，会生成以用户名命令的excel文件
+
+4.如果用例步骤中，有带'< >'字符，则在解析该步骤的时候会报错：提示没有结束符。
+
+5.如果用例步骤中，有带超链接 ' <a href=xxx a/ > '，该步骤在解析时也也会报错。需要收到修改步骤后提交。
+
+6.打开upload_cases.py，修改main方法中的file_name为刚刚导出的excel文件
+
+7.执行upload_cases.py上传用例
+
