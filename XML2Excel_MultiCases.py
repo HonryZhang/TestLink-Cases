@@ -118,7 +118,7 @@ def xml_to_xls(file_path,datas):
     if not os.path.exists(report_path):
         os.makedirs(report_path)
 
-    # 将用例集下的所有用例保存为以用例集命名的xls文档中
+    # 将用例集下的所有用例保存为以login username命名的xls文档中
     #log.info(u'开始保存用例')
     try:
         new_book.save(os.path.abspath(os.path.join(report_path, author+'.xls')))
