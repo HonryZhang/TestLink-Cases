@@ -7,6 +7,7 @@
 import os,sys
 import testlink
 import xlrd
+import pdb
 from Log_util import Logger
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -179,7 +180,8 @@ def import_testlink_cases(project_id,suites_id,data):
 if __name__ == "__main__":
     url = 'http://10.255.101.237/testlink/lib/api/xmlrpc/v1/xmlrpc.php'
 
-    key = '57e7409a17606635ddf3619f99104247'
+    key = '0cccaff364e5ccc988eb7d72561aa49a'
+    #pdb.set_trace()
     tls = testlink.TestlinkAPIClient(url, key)
     project_info = getProject_info()
     for k,v in project_info.items():
@@ -190,7 +192,7 @@ if __name__ == "__main__":
     father_id = raw_input('\n'+ u'请输入测试用例集ID：')
     #project_id = '1'
     #file_name ='testCase_Example.xlsx'
-    file_name ='zhanghongrui.xls'
+    file_name = 'gaomandeng.xls'
     log.info(u'开始执行脚本')
 
     upload_created_cases(project_id,father_id,file_name)

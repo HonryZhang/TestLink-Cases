@@ -21,6 +21,29 @@ def transfer_xml(xml_file):
                 line = line.replace('<p>','').replace('</p>','')
             if '<br/>' in line:
                 line = line.replace('<br/>','')
+            if '<em>' or '</em>' in line:
+                line = line.replace('<em>','').replace('</em>', '')
+            if '<a href=' in line:
+                src = line.find('<a href=')
+                dst = line.find('>')
+                line = line.replace(line[src:dst+1], '')
+            if '</a>' in line:
+                line = line.replace('</a>', '')
+            if '<div class=' in line:
+                src = line.find('<div class=')
+                dst = line.find('>')
+                line = line.replace(line[src:dst+1], '')
+            if '</div>' in line:
+                line = line.replace('</div>', '')
+            if '<span class=' in line:
+                src = line.find('<span class=')
+                dst = line.find('>')
+                line = line.replace(line[src:dst+1], '')
+            if '</span>' in line:
+                line = line.replace('</span>', '')
+            if '&jqlQuery=' in line:
+                line = line.replace(line[line[0:line.find('&jqlQuery=')].rfind('<'):line[line.find('&jqlQuery='):].find('>')+line.find('&jqlQuery=') + 1], '')
+
             #f_w.write(line.decode('gbk').encode('utf-8'))
             f_w.write(line)
             #f_w.write(line.encode('utf-8'))
@@ -133,6 +156,6 @@ def xml_to_xls(file_path,datas):
 
 
 if __name__=='__main__':
-    xml_file = '/Users/xsky/Downloads/xml_test.xml'
+    xml_file = './mdgao_1.xml'
     author = raw_input('Testlink login username:')
     get_datas(xml_file)

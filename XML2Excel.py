@@ -21,6 +21,26 @@ def transfer_xml(xml_file):
                 line = line.replace('<p>','').replace('</p>','')
             if '<br/>' in line:
                 line = line.replace('<br/>','')
+            if '<em>' or '</em>' in line:
+                line = line.replace('<em>','').replace('</em>', '')
+            if '<a href=' in line:
+                src = line.find('<a href=')
+                dst = line.find('>')
+                line = line.replace(line[src:dst+1], '')
+            if '</a>' in line:
+                line = line.replace('</a>', '')
+            if '<div class=' in line:
+                src = line.find('<div class=')
+                dst = line.find('>')
+                line = line.replace(line[src:dst+1], '')
+            if '</div>' in line:
+                line = line.replace('</div>', '')
+            if '<span class=' in line:
+                src = line.find('<span class=')
+                dst = line.find('>')
+                line = line.replace(line[src:dst+1], '')
+            if '</span>' in line:
+                line = line.replace('</span>', '')
             #f_w.write(line.decode('gbk').encode('utf-8'))
             f_w.write(line)
             #f_w.write(line.encode('utf-8'))
@@ -58,6 +78,13 @@ def get_datas(xml_file):
     expected_results=[]
     for i in range(len(steps)):
         step_number = steps[i]['index']
+        print '-------------------'
+        print steps[i]
+        print '1111111111111111111'
+        print steps[i]['step']
+        print '2222222222222222222'
+        print steps[i]['step'].split()
+        print '3333333333333333333'
         action = ' '.join(steps[i]['step'].split())
         actions.append(step_number + '.' + action)
         expected_result = steps[i]['result']
@@ -65,6 +92,8 @@ def get_datas(xml_file):
             expected_result = ''
             expected_results.append(expected_result)
         else:
+            print '44444444444444444'
+            print expected_result
             expected_result = ' '.join(expected_result.split())
             expected_results.append(step_number + '.' + expected_result)
 
@@ -124,6 +153,6 @@ def xml_to_xls(file_path,datas):
 
 
 if __name__=='__main__':
-    xml_file = '/Users/xsky/Downloads/xml_test.xml'
+    xml_file = './mdgao_1.xml'
     author = raw_input('Testlink login username:')
     get_datas(xml_file)
