@@ -41,6 +41,8 @@ def transfer_xml(xml_file):
                 line = line.replace(line[src:dst+1], '')
             if '</span>' in line:
                 line = line.replace('</span>', '')
+	    if '&jqlQuery=' in line:
+                line = line.replace(line[line[0:line.find('&jqlQuery=')].rfind('<'):line[line.fi    nd('&jqlQuery='):].find('>')+line.find('&jqlQuery=') + 1], '')
             #f_w.write(line.decode('gbk').encode('utf-8'))
             f_w.write(line)
             #f_w.write(line.encode('utf-8'))
