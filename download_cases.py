@@ -116,10 +116,10 @@ def get_suites(suite_id):
         sys.exit()
 
 if __name__=="__main__":
-    url = 'http://10.255.101.237/testlink/lib/api/xmlrpc/v1/xmlrpc.php'
+    url = 'http://10.255.101.237/lib/api/xmlrpc/v1/xmlrpc.php'
 
     #登陆testlink后点击上方个人账号进入个人中心，新页面点击 '生成新的秘钥'，使用该key替换掉upload_excel_data.py文件中的key值
-    key = '57e7409a17606635ddf3619f99104247'
+    key = '502b4a3cd51f3385b013c0da257d5eeb'
     tls = testlink.TestlinkAPIClient(url, key)
     #要下载的用例集的ID，可通过在testlink界面选取用例集，然后点击右键获取
     father_id = raw_input(u'请输入测试用例集ID：')

@@ -25,6 +25,36 @@ def transfer_xml(xml_file):
                 line = line.replace('<p>','').replace('</p>','')
             if '<br/>' in line:
                 line = line.replace('<br/>','')
+            if '<em>' or '</em>' in line:
+                line = line.replace('<em>','').replace('</em>', '')
+            if '<a href=' in line:
+                src = line.find('<a href=')
+                dst = line.find('>')
+                line = line.replace(line[src:dst+1], '')
+            if '</a>' in line:
+                line = line.replace('</a>', '')
+            if '<div class=' in line:
+                src = line.find('<div class=')
+                dst = line.find('>')
+                line = line.replace(line[src:dst+1], '')
+            if '</div>' in line:
+                line = line.replace('</div>', '')
+            if '<span class=' in line:
+                src = line.find('<span class=')
+                dst = line.find('>')
+                line = line.replace(line[src:dst+1], '')
+            if '</span>' in line:
+                line = line.replace('</span>', '')
+            if '&jqlQuery=' in line:
+                line = line.replace(line[line[0:line.find('&jqlQuery=')].rfind('<'):line[line.find('&jqlQuery='):].find('>')+line.find('&jqlQuery=') + 1], '')
+            if '<bucket-name>' in line:
+                line = line.replace('<bucket-name>','bucket-name')
+            if '<索引池pool-name>' in line:
+                line = line.replace('<索引池pool-name>','indexpool-name')
+            if '<bucket id>_<对象名>' in line:
+                line = line.replace('<bucket id>_<对象名>','bucket id_对象名')
+            if '<del>'or '</del>' in line:
+                line = line.replace('<del>','').replace('</del>','')
             #f_w.write(line.decode('gbk').encode('utf-8'))
             f_w.write(line)
             #f_w.write(line.encode('utf-8'))
