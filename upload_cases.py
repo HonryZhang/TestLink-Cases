@@ -192,7 +192,7 @@ if __name__ == "__main__":
     father_id = raw_input('\n'+ u'请输入测试用例集ID：')
     #project_id = '1'
     #file_name ='testCase_Example.xlsx'
-    file_name = 'hongrui.xls'
+    file_name = 'hongrui.xlsx'
     log.info(u'开始执行脚本')
 
     upload_created_cases(project_id,father_id,file_name)

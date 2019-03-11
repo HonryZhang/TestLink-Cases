@@ -96,7 +96,7 @@ def save_suites(file_path,datas,father_id):
     #将用例集下的所有用例保存为以用例集命名的xls文档中
     log.info(u'开始保存用例')
     try:
-        new_book.save(os.path.abspath(os.path.join(report_path, suits_name+'.xls')))
+        new_book.save(os.path.abspath(os.path.join(report_path, suits_name+'.xlsx')))
     except Exception as e:
         log.error(u'保存用例失败',str(e))
         sys.exit()
