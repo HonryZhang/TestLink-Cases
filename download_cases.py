@@ -37,12 +37,14 @@ def download_case():
 
         for i in range(len(data['steps'])):
             step_number = data['steps'][i]['step_number']
-            actions.append(step_number+'.'+data['steps'][i]['actions'].replace('<p>','').replace('</p>',''))
+            #actions.append(step_number+'.'+data['steps'][i]['actions'].replace('<p>','').replace('</p>',''))
+            actions.append(data['steps'][i]['actions'].replace('<p>', '').replace('</p>', ''))
             expected_result = data['steps'][i]['expected_results']
             if expected_result == '':
                 expected_results.append(expected_result)
             else:
-                expected_results.append(step_number+'.'+expected_result.replace('<p>','').replace('</p>',''))
+                #expected_results.append(step_number+'.'+expected_result.replace('<p>','').replace('</p>',''))
+                expected_results.append(expected_result.replace('<p>', '').replace('</p>', ''))
         datas.append((case_name,summary,preconditions,'\n'.join(actions),'\n'.join(expected_results),execution_type,importance,author))
 
     log.info(u'下载数据完毕，开始执行格式转换')
@@ -96,7 +98,7 @@ def save_suites(file_path,datas,father_id):
     #将用例集下的所有用例保存为以用例集命名的xls文档中
     log.info(u'开始保存用例')
     try:
-        new_book.save(os.path.abspath(os.path.join(report_path, suits_name+'.xlsx')))
+        new_book.save(os.path.abspath(os.path.join(report_path, suits_name+'.xls')))
     except Exception as e:
         log.error(u'保存用例失败',str(e))
         sys.exit()
