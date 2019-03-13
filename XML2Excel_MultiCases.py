@@ -90,7 +90,7 @@ def get_datas(xml_file):
     #summary =  test['rss']['channel']['item']['summary']
     #print summary
     #steps = test['rss']['channel']['item']['customfields']['customfield'][1]['customfieldvalues']['steps']['step']
-        precondition = u'1.集群状态正常'+'\n'+u'2.UI登录正常'+'\n'+u'3.已经创建好数据池和缓存池'
+        precondition = u'1.集群状态正常'+'\n'+u'2.UI登录正常'+'\n'+u'3.已经创建好数据池和对象索引池'
         execution_type =u'手动'
         importance = u'高'
 
