@@ -112,12 +112,12 @@ def get_datas(xml_file):
 #将获取到的数据按元组形式存放到列表
     datas.append((case_name,summary,precondition,'\n'.join(actions),'\n'.join(expected_results),execution_type,importance))
 
-    xml_to_xls(os.path.join('testCase', 'download_template.xls'), datas)
+    xml_to_xls(os.path.join('testCase', 'download_template.xlsx'), datas)
 
 #读取datas列表中的元素，并按照列表对应的行列关系存入值
 def xml_to_xls(file_path,datas):
     # 读取excel模版
-    book = xlrd.open_workbook(file_path, formatting_info=True)
+    book = xlrd.open_workbook(file_path)
     # 复制读取的excel
     new_book = copy(book)
 
