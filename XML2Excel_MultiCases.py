@@ -73,7 +73,7 @@ def get_datas(xml_file):
     new_file = transfer_xml(xml_file)
     test = xml_2_json(new_file)
     #test = xml_2_json()
-    print json.dumps(test)
+    #print json.dumps(test)
     print len(test['rss']['channel']['item'])
     for i in range(len(test['rss']['channel']['item'])):
         case_name = test['rss']['channel']['item'][i]['title']
@@ -83,30 +83,33 @@ def get_datas(xml_file):
         #print summary
         steps = test['rss']['channel']['item'][i]['customfields']['customfield'][1]['customfieldvalues']['steps']['step']
         #print steps
-    #case_name = test['rss']['channel']['item']['title']
-    #print case_name
-    #case_name = ' '.join(case_name.split())
-    #print case_name
-    #summary =  test['rss']['channel']['item']['summary']
-    #print summary
-    #steps = test['rss']['channel']['item']['customfields']['customfield'][1]['customfieldvalues']['steps']['step']
+
         precondition = u'1.集群状态正常'+'\n'+u'2.UI登录正常'+'\n'+u'3.已经创建好数据池和对象索引池'
         execution_type =u'手动'
         importance = u'高'
 
         actions = []
         expected_results=[]
-        for j in range(len(steps)):
-            step_number = steps[j]['index']
-            action = ' '.join(steps[j]['step'].split())
+# 如果用例只有一个步骤，则返回的是一个集合，不是列表，需要判断
+        if isinstance(steps, dict):
+            step_number = steps['index']
+            action = steps['step']
             actions.append(step_number + '.' + action)
-            expected_result = steps[j]['result']
-            if expected_result is None:
-                expected_result = ''
-                expected_results.append(expected_result)
-            else:
-                expected_result = ' '.join(expected_result.split())
-                expected_results.append(step_number + '.' + expected_result)
+            expected_result = steps['result']
+            expected_results.append(step_number + '.' + expected_result)
+        elif isinstance(steps, list):
+            for j in range(len(steps)):
+                ##print range(len(steps))
+                step_number = steps[j]['index']
+                action = ' '.join(steps[j]['step'].split())
+                actions.append(step_number + '.' + action)
+                expected_result = steps[j]['result']
+                if expected_result is None:
+                    expected_result = ''
+                    expected_results.append(expected_result)
+                else:
+                    expected_result = ' '.join(expected_result.split())
+                    expected_results.append(step_number + '.' + expected_result)
 
     #将获取到的数据按元组形式存放到列表
         datas.append((case_name,summary,precondition,'\n'.join(actions),'\n'.join(expected_results),execution_type,importance))

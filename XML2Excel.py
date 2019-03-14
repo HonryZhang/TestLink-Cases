@@ -86,19 +86,28 @@ def get_datas(xml_file):
 
     actions = []
     expected_results=[]
-    for i in range(len(steps)):
-        step_number = steps[i]['index']
 
-        action = ' '.join(steps[i]['step'].split())
+#如果用例只有一个步骤，则返回的是一个集合，不是列表，需要判断
+    if isinstance(steps,dict):
+        step_number = steps['index']
+        action = steps['step']
         actions.append(step_number + '.' + action)
-        expected_result = steps[i]['result']
-        if expected_result is None:
-            expected_result = ''
-            expected_results.append(expected_result)
-        else:
+        expected_result = steps['result']
+        expected_results.append(step_number + '.' + expected_result)
+    elif isinstance(steps,list):
+        for i in range(len(steps)):
+            step_number = steps[i]['index']
+
+            action = ' '.join(steps[i]['step'].split())
+            actions.append(step_number + '.' + action)
+            expected_result = steps[i]['result']
+            if expected_result is None:
+                expected_result = ''
+                expected_results.append(expected_result)
+            else:
             # print expected_result
-            expected_result = ' '.join(expected_result.split())
-            expected_results.append(step_number + '.' + expected_result)
+                expected_result = ' '.join(expected_result.split())
+                expected_results.append(step_number + '.' + expected_result)
 
 #将获取到的数据按元组形式存放到列表
     datas.append((case_name,summary,precondition,'\n'.join(actions),'\n'.join(expected_results),execution_type,importance))
