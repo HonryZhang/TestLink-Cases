@@ -9,14 +9,19 @@ from xlutils.copy import copy
 #reload(sys)
 #sys.setdefaultencoding('utf8')
 
-import xmltodict,os
+import xmltodict,os,re
 
 #去掉xml件中的部分html字符<p>,</p>,<br/>
 def transfer_xml(xml_file):
     with open(xml_file,'r')as f:
         lines = f.readlines()
     with open(xml_file,'w')as f_w:
+        pattern = re.compile(r'(<\d+)')
         for line in lines:
+            if pattern.findall(line):
+                for str in pattern.findall(line):
+                    new_str = str.replace('<', '小于')
+                    line = re.sub(pattern, new_str, line)
             if '<p>' or '</p>' in line:
                 line = line.replace('<p>','').replace('</p>','')
             if '<br/>' in line:
@@ -24,34 +29,45 @@ def transfer_xml(xml_file):
             if '<em>' or '</em>' in line:
                 line = line.replace('<em>','').replace('</em>', '')
             if '<a href=' in line:
-                src = line.find('<a href=')
-                dst = line.find('>')
-                line = line.replace(line[src:dst+1], '')
+                line = line.replace('<a href=', '')
             if '</a>' in line:
                 line = line.replace('</a>', '')
-            if '<div class=' in line:
-                src = line.find('<div class=')
-                dst = line.find('>')
-                line = line.replace(line[src:dst+1], '')
+            if '<div' in line:
+                line = line.replace('<div','div')
+
             if '</div>' in line:
-                line = line.replace('</div>', '')
-            if '<span class=' in line:
-                src = line.find('<span class=')
-                dst = line.find('>')
-                line = line.replace(line[src:dst+1], '')
+                line = line.replace('</div>', '/div')
+            # if '<span class=' in line:
+            #     src = line.find('<span class=')
+            #     dst = line.find('>')
+            #     line = line.replace(line[src:dst+1], '')
+            if '<span' in line:
+                line = line.replace('<span', '')
             if '</span>' in line:
                 line = line.replace('</span>', '')
             if '&jqlQuery=' in line:
                 line = line.replace(line[line[0:line.find('&jqlQuery=')].rfind('<'):line[line.find('&jqlQuery='):].find('>')+line.find('&jqlQuery=') + 1], '')
-            if '<bucket-name>' in line:
-                line = line.replace('<bucket-name>','bucket-name')
+            if '<bucket' in line:
+                line = line.replace('<bucket','bucket')
             if '<索引池pool-name>' in line:
                 line = line.replace('<索引池pool-name>','indexpool-name')
             if '<bucket id>_<对象名>' in line:
                 line = line.replace('<bucket id>_<对象名>','bucket id_对象名')
             if '<del>'or '</del>' in line:
                 line = line.replace('<del>','').replace('</del>','')
-            #f_w.write(line.decode('gbk').encode('utf-8'))
+            if '&' in line:
+                line = line.replace('&','or')
+            if '<ip>' in line:
+                line = line.replace('<ip>', 'ip')
+            if '<\\' in line:
+                line = line.replace('<\\', '')
+            if '<DIR>' in line:
+                line = line.replace('<DIR>','DIR')
+            if '<网关' in line:
+                line = line.replace('<网关','网关')
+            if '<img' in line:
+                line = line.replace('<img','img')
+
             f_w.write(line)
             #f_w.write(line.encode('utf-8'))
     new_file = xml_file
@@ -60,11 +76,15 @@ def transfer_xml(xml_file):
 #将xml文件转换成json格式
 def xml_2_json(file):
     #new_file = transfer_xml(xml_file)
-    xml = open(file,'r')
-    xml_string = xml.read()
-    xml.close()
-    json_file = xmltodict.parse(xml_string)
-    return json_file
+    with open(file,'r')as xml:
+        xml_string = xml.read()
+    #xml.close()
+    try:
+        json_file = xmltodict.parse(xml_string)
+        return json_file
+    except Exception as e:
+        print 'Error:',e
+
 
 #读取json文件，取出需要的数据，以元组的形式存放到datas列表中，方便后续扩展成多用例批量导入
 def get_datas(xml_file):
@@ -84,7 +104,8 @@ def get_datas(xml_file):
         steps = test['rss']['channel']['item'][i]['customfields']['customfield'][1]['customfieldvalues']['steps']['step']
         #print steps
 
-        precondition = u'1.集群状态正常'+'\n'+u'2.UI登录正常'+'\n'+u'3.已经创建好数据池和对象索引池'
+        precondition = u'1.集群状态正常'+'\n'+u'2.UI登录正常'
+
         execution_type =u'手动'
         importance = u'高'
 
@@ -104,22 +125,25 @@ def get_datas(xml_file):
                 action = ' '.join(steps[j]['step'].split())
                 actions.append(step_number + '.' + action)
                 expected_result = steps[j]['result']
+                if isinstance(expected_result, dict):
+                    continue
                 if expected_result is None:
                     expected_result = ''
                     expected_results.append(expected_result)
+
                 else:
                     expected_result = ' '.join(expected_result.split())
                     expected_results.append(step_number + '.' + expected_result)
 
     #将获取到的数据按元组形式存放到列表
         datas.append((case_name,summary,precondition,'\n'.join(actions),'\n'.join(expected_results),execution_type,importance))
-    xml_to_xls(os.path.join('testCase', 'download_template.xlsx'), datas)
+    xml_to_xls(os.path.join('testCase', 'download_template.xls'), datas)
 
 #读取datas列表中的元素，并按照列表对应的行列关系存入值
 def xml_to_xls(file_path,datas):
     # 读取excel模版
     #book = xlrd.open_workbook(file_path, formatting_info=True)
-    book = xlrd.open_workbook(file_path)
+    book = xlrd.open_workbook(file_path,formatting_info=True)
     # 复制读取的excel
     new_book = copy(book)
 
@@ -167,6 +191,7 @@ def xml_to_xls(file_path,datas):
 
 
 if __name__=='__main__':
-    xml_file = '/Users/xsky/Downloads/xml_test.xml'
-    author = raw_input('Testlink Login UserName:')
+    xml_file = '/Users/xsky/Downloads/SearchRequest.xml'
+    #author = raw_input('Testlink Login UserName:')
+    author='hongrui'
     get_datas(xml_file)
