@@ -34,7 +34,8 @@ def transfer_xml(xml_file):
                 line = line.replace('</a>', '')
             if '<div' in line:
                 line = line.replace('<div','div')
-
+            if '<a class' in line:
+                line = line.replace('<a class','class')
             if '</div>' in line:
                 line = line.replace('</div>', '/div')
             # if '<span class=' in line:
@@ -83,6 +84,7 @@ def xml_2_json(file):
         json_file = xmltodict.parse(xml_string)
         return json_file
     except Exception as e:
+        print '\033[1;31m请检查用例对应的xml文件中是否包含\'<xxx\'或者\'<xxx>\'类似的字符串，如果存在，请将字符串前的\'<\'删除后再次执行.\033[0m'
         print 'Error:',e
 
 
@@ -94,17 +96,27 @@ def get_datas(xml_file):
     test = xml_2_json(new_file)
     #test = xml_2_json()
     #print json.dumps(test)
-    print len(test['rss']['channel']['item'])
+    total_cases = len(test['rss']['channel']['item'])
+    print '\033[1;34m本次预计转换<%s>条用例，列表如下： \033[0m'%total_cases
     for i in range(len(test['rss']['channel']['item'])):
         case_name = test['rss']['channel']['item'][i]['title']
         case_name = ''.join(case_name.split())
         print case_name
         summary = test['rss']['channel']['item'][i]['summary']
         #print summary
-        steps = test['rss']['channel']['item'][i]['customfields']['customfield'][1]['customfieldvalues']['steps']['step']
+
+        steps_dict = test['rss']['channel']['item'][i]['customfields']['customfield'][1]
+        #print steps_dict
+        #if steps_dict.has_key('customfieldvalues'):
+        if steps_dict.get('customfieldvalues'):
+            steps = steps_dict['customfieldvalues']['steps']['step']
+        else:
+            print u'\033[1;31mCase:%s 居然没有用例步骤. Skip it! \033[0m' % (case_name)
+            total_cases -=1
+            continue
         #print steps
 
-        precondition = u'1.集群状态正常'+'\n'+u'2.UI登录正常'
+        precondition = u'1.集群状态正常'+'\n'+u'2.UI登录正常'+u'3.已经创建好数据池和对象索引池'+u'4.已初始化对象存储'+u'5.已经创建1个数据池data_pool0和1个索引池index_pool0'
 
         execution_type =u'手动'
         importance = u'高'
@@ -137,7 +149,9 @@ def get_datas(xml_file):
 
     #将获取到的数据按元组形式存放到列表
         datas.append((case_name,summary,precondition,'\n'.join(actions),'\n'.join(expected_results),execution_type,importance))
+    print '\033[1;34m本次实际转换<%s>条用例，请查看打印日志. \033[0m' % total_cases
     xml_to_xls(os.path.join('testCase', 'download_template.xls'), datas)
+
 
 #读取datas列表中的元素，并按照列表对应的行列关系存入值
 def xml_to_xls(file_path,datas):
@@ -186,12 +200,26 @@ def xml_to_xls(file_path,datas):
         sys.exit()
 
     else:
-        print 'success'
+        print '\033[1;32m转换用例成功,存放地址为:\033[0m'+os.path.join(report_path, author+'.xls')
+        #print '\033[1;34m 本次实际转换%s条用例，请查看打印日志. \033[0m' % total_cases
         #log.info(u'导出用例成功，存放地址为:' + report_path)
 
 
 if __name__=='__main__':
     xml_file = '/Users/xsky/Downloads/SearchRequest.xml'
-    #author = raw_input('Testlink Login UserName:')
-    author='hongrui'
-    get_datas(xml_file)
+
+    print '\033[5;31m用例转换前，请根据测试产品和测试集的实际情况，修改precondition字段的值（第119行)\033[0m'
+
+    while True:
+        response = raw_input('是否继续,默认为Y：(Y/N)-->')
+        if response in ['Y','yes','y','']:
+            author = 'hongrui'
+            #author = raw_input('Testlink Login UserName:')
+            get_datas(xml_file)
+            break
+        elif response in ['N','no','n','q']:
+            print'\033[5;32m谢谢使用，请修改预置条件后再执行.\033[0m'
+            sys.exit()
+        else:
+            print'\033[5;31m输入错误，请重新输入.\033[0m'
+            continue
