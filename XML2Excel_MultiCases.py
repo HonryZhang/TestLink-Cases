@@ -159,29 +159,6 @@ def get_datas(xml_file):
 
         # actions = []
         # expected_results=[]
-# # 如果用例只有一个步骤，则返回的是一个集合，不是列表，需要判断
-#         if isinstance(steps, dict):
-#             step_number = steps['index']
-#             action = steps['step']
-#             actions.append(step_number + '.' + action)
-#             expected_result = steps['result']
-#             expected_results.append(step_number + '.' + expected_result)
-#         elif isinstance(steps, list):
-#             for j in range(len(steps)):
-#                 ##print range(len(steps))
-#                 step_number = steps[j]['index']
-#                 action = ' '.join(steps[j]['step'].split())
-#                 actions.append(step_number + '.' + action)
-#                 expected_result = steps[j]['result']
-#                 if isinstance(expected_result, dict):
-#                     continue
-#                 if expected_result is None:
-#                     expected_result = ''
-#                     expected_results.append(expected_result)
-#
-#                 else:
-#                     expected_result = ' '.join(expected_result.split())
-#                     expected_results.append(step_number + '.' + expected_result)
 
     #将获取到的数据按元组形式存放到列表
         datas.append((case_name,summary,precondition,'\n'.join(actions),'\n'.join(expected_results),execution_type,importance))
@@ -244,7 +221,7 @@ def xml_to_xls(file_path,datas):
 if __name__=='__main__':
     xml_file = '/Users/xsky/Downloads/test_xml.xml'
 
-    print '\033[5;31m用例转换前，请根据测试产品和测试集的实际情况，修改precondition字段的值（第128行)\033[0m'
+    print '\033[5;31m用例转换前，请根据测试产品和测试集的实际情况，修改precondition字段的值（第155行)\033[0m'
 
     while True:
         response = raw_input('是否继续,默认为Y：(Y/N)-->')
