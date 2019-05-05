@@ -182,7 +182,7 @@ def get_datas(xml_file):
 #                 else:
 #                     expected_result = ' '.join(expected_result.split())
 #                     expected_results.append(step_number + '.' + expected_result)
-
+#
     #将获取到的数据按元组形式存放到列表
         datas.append((case_name,summary,precondition,'\n'.join(actions),'\n'.join(expected_results),execution_type,importance))
     print '\033[1;34m本次实际转换<%s>条用例，请查看打印日志. \033[0m' % total_cases
