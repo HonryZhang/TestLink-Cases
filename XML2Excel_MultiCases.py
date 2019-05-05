@@ -68,7 +68,16 @@ def transfer_xml(xml_file):
                 line = line.replace('<网关','网关')
             if '<img' in line:
                 line = line.replace('<img','img')
-
+            if '<object_name>' in line:
+                line = line.replace('<object_name>','object_name')
+            if '<对象名>' in line:
+                line = line.replace('<对象名>','对象名')
+            if '<>' in line:
+                line = line.replace('<>','大于小于符号')
+            if '<ol>' or '</ol>' in line:
+                line = line.replace('<ol>', '').replace('</ol>','')
+            if '<li>' or '</li>' in line:
+                line = line.replace('<li>', '').replace('</li>', '')
             f_w.write(line)
             #f_w.write(line.encode('utf-8'))
     new_file = xml_file
@@ -104,48 +113,75 @@ def get_datas(xml_file):
         print case_name
         summary = test['rss']['channel']['item'][i]['summary']
         #print summary
-
+        actions = []
+        expected_results=[]
         steps_dict = test['rss']['channel']['item'][i]['customfields']['customfield'][1]
         #print steps_dict
         #if steps_dict.has_key('customfieldvalues'):
         if steps_dict.get('customfieldvalues'):
             steps = steps_dict['customfieldvalues']['steps']['step']
+            # 如果用例只有一个步骤，则返回的是一个集合，不是列表，需要判断
+            if isinstance(steps, dict):
+                step_number = steps['index']
+                action = steps['step']
+                actions.append(step_number + '.' + action)
+                expected_result = steps['result']
+                expected_results.append(step_number + '.' + expected_result)
+            elif isinstance(steps, list):
+                for j in range(len(steps)):
+                    ##print range(len(steps))
+                    step_number = steps[j]['index']
+                    action = ' '.join(steps[j]['step'].split())
+                    actions.append(step_number + '.' + action)
+                    expected_result = steps[j]['result']
+                    if isinstance(expected_result, dict):
+                        continue
+                    if expected_result is None:
+                        expected_result = ''
+                        expected_results.append(expected_result)
+
+                    else:
+                        expected_result = ' '.join(expected_result.split())
+                        expected_results.append(step_number + '.' + expected_result)
         else:
-            print u'\033[1;31mCase:%s 居然没有用例步骤. Skip it! \033[0m' % (case_name)
-            total_cases -=1
-            continue
+            #print u'\033[1;31m----Case:%s 居然没有用例步骤. Skip it!---- \033[0m' % (case_name)
+            #total_cases -=1
+            #continue
+            actions = []
+            expected_results=[]
+
         #print steps
 
-        precondition = u'1.集群状态正常'+'\n'+u'2.UI登录正常'+u'3.已经创建好数据池和对象索引池'+u'4.已初始化对象存储'+u'5.已经创建1个数据池data_pool0和1个索引池index_pool0'
+        precondition = u'1.集群状态正常'+'\n'+u'2.UI登录正常'+u'3.已经创建好数据池和对象索引池'+u'4.已初始化对象存储'+u'5.已经创建至少1个数据池data_pool0和1个索引池index_pool0'
 
         execution_type =u'手动'
         importance = u'高'
 
-        actions = []
-        expected_results=[]
-# 如果用例只有一个步骤，则返回的是一个集合，不是列表，需要判断
-        if isinstance(steps, dict):
-            step_number = steps['index']
-            action = steps['step']
-            actions.append(step_number + '.' + action)
-            expected_result = steps['result']
-            expected_results.append(step_number + '.' + expected_result)
-        elif isinstance(steps, list):
-            for j in range(len(steps)):
-                ##print range(len(steps))
-                step_number = steps[j]['index']
-                action = ' '.join(steps[j]['step'].split())
-                actions.append(step_number + '.' + action)
-                expected_result = steps[j]['result']
-                if isinstance(expected_result, dict):
-                    continue
-                if expected_result is None:
-                    expected_result = ''
-                    expected_results.append(expected_result)
-
-                else:
-                    expected_result = ' '.join(expected_result.split())
-                    expected_results.append(step_number + '.' + expected_result)
+        # actions = []
+        # expected_results=[]
+# # 如果用例只有一个步骤，则返回的是一个集合，不是列表，需要判断
+#         if isinstance(steps, dict):
+#             step_number = steps['index']
+#             action = steps['step']
+#             actions.append(step_number + '.' + action)
+#             expected_result = steps['result']
+#             expected_results.append(step_number + '.' + expected_result)
+#         elif isinstance(steps, list):
+#             for j in range(len(steps)):
+#                 ##print range(len(steps))
+#                 step_number = steps[j]['index']
+#                 action = ' '.join(steps[j]['step'].split())
+#                 actions.append(step_number + '.' + action)
+#                 expected_result = steps[j]['result']
+#                 if isinstance(expected_result, dict):
+#                     continue
+#                 if expected_result is None:
+#                     expected_result = ''
+#                     expected_results.append(expected_result)
+#
+#                 else:
+#                     expected_result = ' '.join(expected_result.split())
+#                     expected_results.append(step_number + '.' + expected_result)
 
     #将获取到的数据按元组形式存放到列表
         datas.append((case_name,summary,precondition,'\n'.join(actions),'\n'.join(expected_results),execution_type,importance))
@@ -193,7 +229,7 @@ def xml_to_xls(file_path,datas):
     # 将用例集下的所有用例保存为以login username命名的xls文档中
     #log.info(u'开始保存用例')
     try:
-        new_book.save(os.path.abspath(os.path.join(report_path, author+'.xls')))
+        new_book.save(os.path.abspath(os.path.join(report_path, author+'-null.xls')))
     except Exception as e:
         #log.error(u'保存用例失败', str(e))
         print e
@@ -206,9 +242,9 @@ def xml_to_xls(file_path,datas):
 
 
 if __name__=='__main__':
-    xml_file = '/Users/xsky/Downloads/SearchRequest.xml'
+    xml_file = '/Users/xsky/Downloads/test_xml.xml'
 
-    print '\033[5;31m用例转换前，请根据测试产品和测试集的实际情况，修改precondition字段的值（第119行)\033[0m'
+    print '\033[5;31m用例转换前，请根据测试产品和测试集的实际情况，修改precondition字段的值（第128行)\033[0m'
 
     while True:
         response = raw_input('是否继续,默认为Y：(Y/N)-->')
