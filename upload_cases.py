@@ -178,7 +178,7 @@ def import_testlink_cases(project_id,suites_id,data):
 
 
 if __name__ == "__main__":
-    url = 'http://10.255.101.237/lib/api/xmlrpc/v1/xmlrpc.php'
+    url =  'https://testlink.xsky.com/lib/api/xmlrpc/v1/xmlrpc.php'
 
     key = '0cccaff364e5ccc988eb7d72561aa49a'
     #pdb.set_trace()
