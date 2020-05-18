@@ -45,7 +45,6 @@
 
 #### 将testlink上用例集中的用例导出成excel格式(download_single_test_suite.py）：
 
-
  1. API对应的URL为：url ='https://testlink.xsky.com/lib/api/xmlrpc/v1/xmlrpc.php'
 
  2. API对应的key为：登陆testlink后点击上方个人账号进入个人中心，新页面点击 '生成新的秘钥'，使用该key替换掉main文件中的key值
@@ -54,8 +53,7 @@
 
  4.执行download_single_test_suite.py
  
-### 将testlink上的多个用例集中的用例导出成excel格式(download_multi_suites.py）
-
+#### 将testlink上的多个用例集中的用例导出成excel格式(download_multi_suites.py）
 
  1. API对应的URL为：url ='https://testlink.xsky.com/lib/api/xmlrpc/v1/xmlrpc.php'
 
