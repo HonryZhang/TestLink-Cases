@@ -27,7 +27,7 @@
 #### 上传用例(upload_cases.py)：
 
 
-1.API对应的URL为：url = 'http://10.255.101.237/testlink/lib/api/xmlrpc/v1/xmlrpc.php'
+1.API对应的URL为：url = 'https://testlink.xsky.com/lib/api/xmlrpc/v1/xmlrpc.php'
 
 2.API对应的key为：登陆testlink后点击上方个人账号进入个人中心，新页面点击 '生成新的秘钥'，使用该key替换掉main文件中的key值
 
@@ -43,16 +43,27 @@
 
 8.执行upload_cases.py
 
-#### 下载用例(download_cases.py）：
+#### 将testlink上用例集中的用例导出成excel格式(download_single_test_suite.py）：
 
 
-1.API对应的URL为：url = 'http://10.255.101.237/testlink/lib/api/xmlrpc/v1/xmlrpc.php'
+ 1. API对应的URL为：url ='https://testlink.xsky.com/lib/api/xmlrpc/v1/xmlrpc.php'
 
-2.API对应的key为：登陆testlink后点击上方个人账号进入个人中心，新页面点击 '生成新的秘钥'，使用该key替换掉main文件中的key值
+ 2. API对应的key为：登陆testlink后点击上方个人账号进入个人中心，新页面点击 '生成新的秘钥'，使用该key替换掉main文件中的key值
 
-3.father_id为目标用例集ID，可通过在testlink用例管理界面选取用例集，然后点击右键获取APIID
+ 3. father_id为目标用例集ID，可通过在testlink用例管理界面选取用例集，然后点击右键获取APIID
 
-4.执行download_cases.py
+ 4.执行download_single_test_suite.py
+ 
+### 将testlink上的多个用例集中的用例导出成excel格式(download_multi_suites.py）
+
+
+ 1. API对应的URL为：url ='https://testlink.xsky.com/lib/api/xmlrpc/v1/xmlrpc.php'
+
+ 2. API对应的key为：登陆testlink后点击上方个人账号进入个人中心，新页面点击 '生成新的秘钥'，使用该key替换掉main文件中的key值
+
+ 3. father_id为目标用例集ID，可通过在testlink用例管理界面选取用例集，然后点击右键获取APIID
+
+ 4.执行download_multi_suites.py, 输入不同的用例集ID，ID之间用英文模式下的逗号分隔
 
 #### 将Jira用例导入到testlink(XML2Excel.py）
 
